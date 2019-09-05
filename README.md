@@ -1,7 +1,7 @@
-# QA-growth-plan
-> A growth plan for QA
+# KS-QA
+> QA 知识体系
 
-## 质量
+![QA 能力模型](_pic/QA-capacity-model.png)
 
 ## [软件质量保证](KS-SQA/README.md)
 
