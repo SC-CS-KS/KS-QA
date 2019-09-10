@@ -11,6 +11,8 @@
 * [APIs Test](APIsTest/README.md)
 * [Unit Test](unit-test/README.md)
 
+* [Property-Based Test](PropertyBased/README.md)
+
 ## Performance
 * [Performance Test](perf/perf-test/README.md)
 * [Linux Performance Profile](perf/Linux/README.md)
