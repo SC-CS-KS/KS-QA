@@ -106,12 +106,12 @@ Spock的灵感来自JUnit，jMock，RSpec，Groovy，Scala，Vulcans 和其他�
 ## Getting Started
 这部分会展示 Spock 如何起步，可以说是比较简单的。
 
-### [Spock Web Console](http://meetspock.appspot.com/)【Spock 在线控制台】
-Spock Web 控制台是一个在线 查看、编辑、运行、发布 Spock 测试脚本的网站，
+### Spock Web Console【Spock 在线控制台】
+[Spock Web Console](http://meetspock.appspot.com/) 是一个在线 查看、编辑、运行、发布 Spock 测试脚本的网站，
 它是一个不用做任何付出就能玩转Spock的完美场所。
 所以赶紧去运行一下 [“Hello, Spock!” ](http://meetspock.appspot.com/edit/9001)吧！
 
-### Spock Example Project 【Spock 样例工程】
+### Spock Example Project【Spock 样例工程】
 如果想在本地环境尝试 Spock，可以从 GitHub 下载[ “ Spock Example Project”](https://github.com/spockframework/spock-example)，
 它无需你做任何的设置，就可用使用 Ant，Gradle和Maven运行。
 使用一个简单的命令就可以使用Gradle启动或者在Eclipse和IDEA中运行。具体可以查看README文件中的详细介绍.
