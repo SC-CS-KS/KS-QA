@@ -3,9 +3,9 @@
 ## UT Tools
 ### Java 
 #### Runner
-* [JUnit](JUnit/README.md)
-* [TestNG](TestNG/README.md)
-* [Spock](Spock/README.md)
+* [JUnit](Java/JUnit/README.md)
+* [TestNG](Java/TestNG/README.md)
+* [Spock](Java/Spock/README.md)
 * SpringTest
 
 #### Mock
