@@ -291,7 +291,7 @@ stack.size() == 2
 ```
 你会看到，在验证条件期间，Spock会捕获产生的所有值，并以易读的形式呈现它们。看起来很不错，是不是？
 
-* * Implicit and explicit conditions 隐式和显式条件
+* * Implicit and explicit conditions 隐式和显式条件 
 条件是then块和expect块的基本要素。
 除了调用 void方法 和 被分类为交互的表达式 之外，这些块中的所有顶级表达式都被隐式地视为条件。
 要在其他地方使用条件，需要使用Groovy的assert关键字指定它们：
