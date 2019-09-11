@@ -234,7 +234,8 @@ given, when, then, expect, cleanup, where
 Feature method 必须至少有一个显式（即标记）块。
 实际上，显式块的存在才使得一个方法成为 feature method。块将方法划分为不同的部分，并且不能嵌套。
 
-![](_pic/Spock-blocks-phases.png)
+![](_pic/Spock-blocks-phases.png) 
+
 上图展示了块 和 各个 概率阶段 的映射，where 块比较特别，后续你会看到，我们先来详细了解下其他块。
 
 * Given Blocks (given 块结构)
