@@ -1,6 +1,6 @@
 # [Spock](http://spockframework.org)
 
-* [Spock Framework Reference Documentation](http://spockframework.github.io/spock/docs)
+* [Spock Framework Reference Documentation](handbook/spock-framework-reference-documentation.md)
 
 ## [WhatIs](WhatIs.md)
 
