@@ -952,65 +952,803 @@ def "#lastName"() { // zero-arg method call
 ```
 
 ## Interaction Based Testing 基于交互的测试
+
+基于交互的测试是一种设计和测试技术，在2000年初出现在极限编程（XP）社区中。
+它着眼于对象的行为而不是它们的状态，它探讨了 specification 中的对象如何通过方法调用与其协作者进行交互。
+
+例如，假设我们有一个发布者向其订阅者发送消息：
+```java
+class Publisher {
+  List<Subscriber> subscribers = []
+  int messageCount = 0
+  void send(String message){
+    subscribers*.receive(message)
+    messageCount++
+  }
+}
+
+interface Subscriber {
+  void receive(String message)
+}
+
+class PublisherSpec extends Specification {
+  Publisher publisher = new Publisher()
+}
+```
+我们如何测试Publisher？通过基于状态的测试，我们可以验证发布者是否追踪到其订阅者。
+然而，更有趣的问题是订阅者是否收到发布者发送的消息。
+要回答这个问题，我们需要一个特殊的Subscriber实现，它可以监听发布者与其订阅者之间的对话。
+这种实现称为模拟（mock）对象。
+
+我们当然可以手动创建Subscriber的模拟实现，但是随着方法数量和交互复杂性的增加，编写和维护此代码会变得令人不快。
+这就是模拟框架由来：它们提供了一种方法来描述specification下的对象与其协作者之间的预期交互，
+并且可以生成协作者的模拟实现，用来验证这些期望。
+
+* 如何生成模拟实现？
+```md
+与大多数Java模拟框架一样，Spock使用 JDK动态代理（模拟接口时）和 Byte Buddy 或 CGLIB代理（模拟类时）在运行时生成模拟实现。
+与基于Groovy元编程的实现相比，这个实现的优势在于，同样可用于测试Java代码。
+```
+
+Java世界不乏流行和成熟的模拟框架，仅举几例：
+[JMock](http://jmock.org/)，[EasyMock](http://easymock.org/)，[Mockito](https://site.mockito.org/)。
+虽然这些工具中的每一个都可以与Spock一起使用，但出于希望利用Groovy的功能来使得基于交互的测试更容易编写，更易读，最终更有趣，
+Spock 决定推出自己的模拟框架，与 Spock 的specification 语言紧密集成。
+希望在本章结束时，你能认为 Spock 已经实现了这些目标。
+
+除非另有说明，否则Spock模拟框架的所有功能都可用于测试Java和Groovy代码。
+
 ### Creating Mock Objects 创建Mock对象
+
+模拟对象是使用MockingApi.Mock()方法创建的。让我们创建两个模拟订阅者：
+```groovy
+def subscriber = Mock(Subscriber)
+def subscriber2 = Mock(Subscriber)
+```
+也支持以下类似Java的语法，这可能会提供更好的IDE支持：
+```java
+Subscriber subscriber = Mock()
+Subscriber subscriber2 = Mock()
+```
+这里的mock的类型是从赋值左侧的变量类型推断出来的。
+
+* 注意
+```md
+如果模拟的类型在赋值的左侧给出，则允许（尽管不是必需的）在右侧省略它。
+```
+
+模拟对象实际上实现（或者，在类的情况下，扩展）了它们所代表的类型。换句话说，在示例中，subscriber is-a Subscriber。
+因此，它可以传递给期望此类型的静态类型（Java）代码。
+
 ### Default Behavior of Mock Objects
+
+* Lenient vs. Strict Mocking Frameworks 宽松与严格的模拟框架
+```md
+像 Mockito 一样，我们坚信默认情况下，模拟框架应该是宽松的。
+这意味着允许对模拟对象进行意外的方法调用（或者换句话说，与手头测试无关的交互），并使用默认响应进行回答。
+相反，默认情况下，如EasyMock和JMock模拟框架是严格的，并为每个意外的方法调用抛出异常。
+虽然严格会更严谨，但也可能导致过度规范，每当其他内部代码更改，就会导致脆弱的测试失败。 
+Spock的模拟框架可以很容易地仅描述与交互相关的内容，避免过度规范的陷阱。
+```
+
+最初，模拟对象没有行为。允许对它们调用方法，但除了针对方法的返回类型（false，0或null）返回默认值之外没有任何效果。
+Object.equals，Object.hashCode和Object.toString方法是一个例外，具有以下默认行为：
+模拟对象仅等于自身，具有唯一的哈希代码，以及一个字符串表示，字符串包含了模拟对象所代表类型的名字。
+通过 stubbing 可以覆盖此默认行为，我们将在[Stubbing](#stubbing)部分中了解这些方法。
+
 ### Injecting Mock Objects into Code Under Specification
 
+在创建发布者及其订阅者之后，我们需要让后者为前者所知：
+```java
+class PublisherSpec extends Specification {
+  Publisher publisher = new Publisher()
+  Subscriber subscriber = Mock()
+  Subscriber subscriber2 = Mock()
+
+  def setup() {
+    publisher.subscribers << subscriber // << is a Groovy shorthand for List.add()
+    publisher.subscribers << subscriber2
+  }
+```
+我们现在准备描述双方之间预期的互动。
+
 ### Mocking
+
+模拟是描述 specification 下的对象与其协作者之间（强制）交互的行为。一个例子：
+```groovy
+def "should send messages to all subscribers"() {
+  when:
+  publisher.send("hello")
+
+  then:
+  1 * subscriber.receive("hello")
+  1 * subscriber2.receive("hello")
+}
+```
+大声朗读：“当发布者发送'hello'消息时，两个订阅者都应该只接收一次该消息”。
+
+运行此 feature method 时，执行when块时发生的模拟对象上的所有调用都将与then：块中描述的交互进行匹配。
+如果不满足其中一个交互，则抛出InteractionNotSatisfiedError或其子类类型的异常。此验证自动进行，无需任何其他代码。
+
 #### Interactions
+
+* Is an Interaction Just a Regular Method Invocation? 交互只是一个常规的方法调用吗？
+```md
+不完全是。
+虽然交互看起来类似于常规方法调用，但它只是用来表达预期会发生哪些方法调用。
+理解交互的一个好的方法是作为正则表达式，模拟对象上的所有传入调用都与之匹配。
+根据具体情况，交互可以匹配零个，一个或多个调用。
+```
+
+让我们仔细看看then：块。
+它包含两个交互，每个交互分四个不同的部分：基数，目标约束，方法约束和参数约束
+```md
+1 * subscriber.receive("hello")
+|   |          |       |
+|   |          |       argument constraint 参数约束
+|   |          method constraint 方法约束
+|   target constraint 目标约束
+cardinality 基数
+```
+
 #### Cardinality
+
+交互的基数描述了预期方法调用的频率。它可以是固定数字或范围：
+```groovy
+1 * subscriber.receive("hello")      // exactly one call
+0 * subscriber.receive("hello")      // zero calls
+(1..3) * subscriber.receive("hello") // between one and three calls (inclusive)
+(1.._) * subscriber.receive("hello") // at least one call
+(_..3) * subscriber.receive("hello") // at most three calls
+_ * subscriber.receive("hello")      // any number of calls, including zero
+                                     // (rarely needed; see 'Strict Mocking')
+```
+
 #### Target Constraint
+
+交互的目标约束描述了预期哪个模拟对象接收方法调用：
+```groovy
+1 * subscriber.receive("hello") // a call to 'subscriber'
+1 * _.receive("hello")          // a call to any mock object
+```
+
 #### Method Constraint
+
+交互的方法约束描述了预期调用哪种方法：
+```groovy
+1 * subscriber.receive("hello") // a method named 'receive'
+1 * subscriber./r.*e/("hello")  // a method whose name matches the given regular expression
+                                // (here: method name starts with 'r' and ends in 'e')
+```
+
+当期望调用getter方法时，可以使用Groovy属性语法而不是方法语法：
+```groovy
+1 * subscriber.status // same as: 1 * subscriber.getStatus()
+```
+
+当期望调用setter方法时，只能使用方法语法：
+```groovy
+1 * subscriber.setStatus("ok") // NOT: 1 * subscriber.status = "ok"
+```
+
 #### Argument Constraints
+
+交互的参数约束描述了期望的方法参数：
+```groovy
+1 * subscriber.receive("hello")        // an argument that is equal to the String "hello"
+1 * subscriber.receive(!"hello")       // an argument that is unequal to the String "hello"
+1 * subscriber.receive()               // the empty argument list (would never match in our example)
+1 * subscriber.receive(_)              // any single argument (including null)
+1 * subscriber.receive(*_)             // any argument list (including the empty argument list)
+1 * subscriber.receive(!null)          // any non-null argument
+1 * subscriber.receive(_ as String)    // any non-null argument that is-a String
+1 * subscriber.receive(endsWith("lo")) // any non-null argument that is-a String
+1 * subscriber.receive({ it.size() > 3 && it.contains('a') })
+// an argument that satisfies the given predicate, meaning that
+// code argument constraints need to return true of false
+// depending on whether they match or not
+// (here: message length is greater than 3 and contains the character a)
+```
+
+对于具有多个参数的方法，参数约束按预期工作：
+```groovy
+1 * process.invoke("ls", "-a", _, !null, { ["abcdefghiklmnopqrstuwx1"].contains(it) })
+```
+
+在处理vararg方法时，vararg语法也可用于相应的交互：
+```groovy
+interface VarArgSubscriber {
+    void receive(String... messages)
+}
+
+...
+
+subscriber.receive("hello", "goodbye")
+```
+
+* Spock Deep Dive：Groovy Varargs 深入Spock：Groovy的不定参数
+```md
+Groovy 允许以不定参数样式调用最后一个参数是数组类型的方法。因此，不定参数语法也可用于匹配此类方法的交互。
+```
+
+##### Equality Constraint
+等式约束使用groovy相等来检查参数，即argument == constraint。
+可以使用以下方式作为一个平等约束：
+```md
+any literal 1 * check('string') / 1 * check(1) / 1 * check(null),
+
+a variable 1 * check(var),
+
+a list or map literal 1 * check([1]) / 1 * check([foo: 'bar']),
+
+an object 1 * check(new Person('sam')),
+
+or the result of a method call 1 * check(person())
+```
+
+##### Hamcrest约束
+
+是等式约束的变体，如果约束对象是 Hamcrest 匹配器，那么它将使用该匹配器来检查参数。
+
+##### Wildcard Constraint
+
+通配符约束将匹配包括 null 在内的任何参数。
+即1 * subscriber.receive（）。
+还有扩展通配符约束* _，它匹配任意数量的参数1 * subscriber.receive（* _），包括没有参数。
+
+##### Code Constraint
+
+代码约束是最通用的。它是一个groovy闭包，这个闭包 gets the argument as its parameter. 
+闭包被视为条件块，因此它的行为类似于then块，即每一行都被视为隐式断言。
+它可以模拟除扩展通配符约束之外的所有约束，但建议尽可能使用更简单的约束。
+可以执行多个断言，调用断言方法或与/ verifyAll一起使用。
+
+```groovy
+1 * list.add({
+  verifyAll(it, Person) {
+    firstname == 'William'
+    lastname == 'Kirk'
+    age == 45
+  }
+})
+```
+
+##### Negating Constraint
+
+否定约束！是一个复合约束，即它需要与另一个约束相结合才能工作。它反转嵌套约束的结果。
+例如，1 * subscriber.receive（！null）是检查null的等式约束的组合，
+然后是反转结果的否定约束，将其转换为非null。
+
+虽然它可以与任何其他约束结合，但它并不总是有意义的，例如，1 * subscriber.receive（！_）将不匹配。
+还要记住，非匹配否定约束的诊断只是内部约束确实匹配，而没有任何更多信息。
+
+##### Type Constraint
+
+类型约束检查参数的类型/类，它也是复合约束。它通常把 “_ as Type”，它是通配符约束和类型约束的组合。
+你也可以将它与其他约束相结合，1 * subscriber.receive（{it.contains（'foo'）} as String）
+在执行代码约束之前断言它是一个String，以检查它是否包含foo。
+
 #### Matching Any Method Call
+
+在某种意义上，有时候匹配“任何东西”会很有用：
+```groovy
+1 * subscriber._(*_)     // any method on subscriber, with any argument list
+1 * subscriber._         // shortcut for and preferred over the above
+
+1 * _._                  // any method call on any mock object
+1 * _                    // shortcut for and preferred over the above
+```
+
+* 注意
+```nd
+ 虽然(..)* .(*_) >>_是一个有效的交互声明，但它既不是好的风格，也不是特别有用。
+```
+
 #### Strict Mocking
+ 
+什么时候Matching Any Method Call才有用？
+一个很好的例子是严格模拟，除了那些明确声明的交互之外，它不允许任何交互：
+```groovy
+when:
+publisher.publish("hello")
+
+then:
+1 * subscriber.receive("hello") // demand one 'receive' call on 'subscriber'
+_ * auditing._                  // allow any interaction with 'auditing'
+0 * _                           // don't allow any other interaction
+```
+
+0* 仅作为then：块或方法的最后一次交互才有意义。注意使用_ *（任意数量的调用），它允许与审计组件进行任何交互。
+
+* 注意
+```md
+_ * 仅在严格模拟的情况下才有意义。特别是，在Stubbing调用时永远不需要。
+例如，_ * auditing.record() >> 'ok'可以（并且应该！）简化为auditing.record() >> 'ok'。
+```
+
 #### Where to Declare Interactions
+
+到目前为止，我们在then：block中声明了所有的交互，通常这样做会使 Specification 更易读。
+但是，实际上也允许将交互放在when：block之前的任何位置。这意味着可以在setup方法中声明交互。
+交互也可以在同一规 Specification类 的任何“helper”实例方法中声明。
+
+当对模拟对象进行调用时，它将按照交互声明时的顺序进行匹配。
+如果调用与多个交互匹配，当交互尚未达到其调用限制的上限时，最早声明的交互将获胜。
+此规则有一个例外：在then：block中声明的交互在任何其他交互之前匹配。
+这就允许 then：块 中申明的交互可以 覆盖 setup中的。
+
+* Spock Deep Dive: How Are Interactions Recognized? 深入Spock：交互如何被识别
+```md
+换句话说，是什么使表达式成为交互声明，而不是常规方法调用？ 
+
+Spock使用简单的语法规则来识别交互：
+如果表达式处于语句位置并且是乘法（*）或右移（>>, >>>）操作，那么它将被视为交互并将相应地进行解析。
+
+这样的表达在语句位置几乎没有价值（注：这样的表达作为常规表达式一般不会在语句位置使用），所以改变它的意思会工作的更好。
+注意操作是如何对应于声明基数（当Mocking时）或响应生成器（当Stubbing时）的语法的。
+他们中的任何一个都必须永远存在，Spock 永远不会将单独的foo.bar() 视为互动。
+```
+
 #### Declaring Interactions at Mock Creation Time
+
+如果模拟具有一组不变的“基础”交互，则可以在模拟创建时声明它们
+```groovy
+Subscriber subscriber = Mock {
+   1 * receive("hello")
+   1 * receive("goodbye")
+}
+```
+此功能对于Stubbing和专用[Stubs](#stubs)特别有吸引力。
+请注意，这时的交互不会（也不能）具有目标约束，从上下文中可以清楚地看出它们属于哪个模拟对象。
+
+使用mock初始化实例字段时，也可以声明交互：
+```groovy
+class MySpec extends Specification {
+    Subscriber subscriber = Mock {
+        1 * receive("hello")
+        1 * receive("goodbye")
+    }
+}
+```
+
 #### Grouping Interactions with Same Target
+
+共享相同目标的交互可以在Specification.with块中分组。
+与模拟创建时声明交互类似，这使得不必重复目标约束：
+```groovy
+with(subscriber) {
+    1 * receive("hello")
+    1 * receive("goodbye")
+}
+```
+with块也可用于对具有相同目标的条件进行分组。
+
 #### Mixing Interactions and Conditions
-#### Explicit Interaction Blocks
+
+then块可以包含交互和条件。虽然不是严格要求，但习惯上一般在条件之前声明交互：
+```groovy
+when:
+publisher.send("hello")
+
+then:
+1 * subscriber.receive("hello")
+publisher.messageCount == 1
+```
+大声朗读：“当发布者发送'hello'消息时，订阅者应该只接收一次消息，并且发布者的消息计数应为1”。
+
+#### Explicit Interaction Blocks 显式交互块
+
+在内部，Spock必须在有关预期交互发生之前获得其完整信息。
+那么如何在then：block中声明交互呢？
+答案是，在引擎盖下，Spock将在then：block中交互的声明移动 when:block之前。
+在大多数情况下，这很好，但有时它会导致问题：
+```groovy
+when:
+publisher.send("hello")
+
+then:
+def message = "hello"
+1 * subscriber.receive(message)
+```
+这里我们为预期的参数引入了一个变量。（同样，我们可以为基数引入一个变量。）
+但是，Spock不会知道交互本质上是与变量声明相关联。
+因此它只会移动交互，这将在运行时导致 MissingPropertyException。
+
+解决此问题的一种方法是将（至少）变量声明移动到when：block之前。
+（数据驱动测试的粉丝可能会将变量移动到where：block。）
+在我们的示例中，这将带来额外的好处，我们可以使用相同的变量来发送消息。
+
+另一个解决方案是明确变量声明和交互属于一起的事实：
+```groovy
+when:
+publisher.send("hello")
+
+then:
+interaction {
+  def message = "hello"
+  1 * subscriber.receive(message)
+}
+```
+由于MockingApi.interaction块总是整体移动，因此代码现在可以按预期工作。
+
 #### Scope of Interactions
+
+在then：块中声明的交互的作用范围为when：block之前：
+```groovy
+when:
+publisher.send("message1")
+
+then:
+1 * subscriber.receive("message1")
+
+when:
+publisher.send("message2")
+
+then:
+1 * subscriber.receive("message2")
+```
+这确保订阅者在执行第一个when：block期间接收'message1'，在执行第二个when：block时接收'message2'。
+
+在then：block之外声明的交互在声明时激活，直到 feature method 结尾。
+
+交互始终作用于特定的feature method。
+因此，它们不能在静态方法，setupSpec方法或cleanupSpec方法中声明。同样，模拟对象不应存储在静态或@Shared字段中。
+
 #### Verification of Interactions
+
+基于模拟的测试有两种主要方式可以失败：
+交互可以匹配比允许的更多的调用，或者它可以匹配比所需更少的调用。
+在调用发生时检测到前一种情况，并导致TooManyInvocationsError：
+```md
+Too many invocations for:
+
+2 * subscriber.receive(_) (3 invocations)
+```
+
+为了更容易诊断太多调用匹配的原因，Spock将显示与所讨论的交互相匹配的所有调用：
+```md
+Matching invocations (ordered by last occurrence):
+
+2 * subscriber.receive("hello")   <-- this triggered the error
+1 * subscriber.receive("goodbye")
+```
+根据此输出，其中一个receive（'hello'）调用触发了TooManyInvocationsError。
+请注意，无法区分的调用（如subscriber.receive（'hello'）的两次调用）被聚合到一行输出中，
+因此第一次接收（'hello'）可能在接收（'goodbye'）之前发生。
+
+第二种情况（比所需的调用次数少）只能在执行when块完成后才能检测到。 
+（在此之前，可能仍会发生进一步的调用。）它会导致TooFewInvocationsError：
+```md
+Too few invocations for:
+
+1 * subscriber.receive("hello") (0 invocations)
+```
+注意，该方法有没有被调用实际上并不重要，
+使用不同的参数调用相同的方法，在不同的模拟对象上调用相同的方法，或者将另一个方法称为“替代”此方法。
+以上任何一种情况，都会发生TooFewInvocationsError错误。
+```md
+Unmatched invocations (ordered by similarity):
+
+1 * subscriber.receive("goodbye")
+1 * subscriber2.receive("hello")
+```
+
 #### Invocation Order
+
+通常，确切的方法调用顺序是相对的，并且可能随时间而变化。
+为避免过度规范，Spock默认允许任何调用顺序，前提是最终满足指定的交互：
+```groovy
+then:
+2 * subscriber.receive("hello")
+1 * subscriber.receive("goodbye")
+```
+
+任何调用序列 "hello" "hello" "goodbye", "hello" "goodbye" "hello",  "goodbye" "hello" "hello" 
+都能满足声明的交互。
+
+在调用顺序很重要的情况下，可以通过将交互分成多个then：块来强制交互顺序：
+```groovy
+then:
+2 * subscriber.receive("hello")
+
+then:
+1 * subscriber.receive("goodbye")
+```
+现在，Spock将明确在“goodbye”之前收到两个“hello”。
+换句话说，调用顺序在then之间是强制的，但在then：blocks不是。
+
+* 注意
+```md
+使用and: 拆分then：block 不会强制任何顺序，因为and：仅用于文档目的，不带任何语义。
+```
+
 #### Mocking Classes
 
+除了接口，Spock还支持模拟类。
+模拟类就像模拟接口一样工作，唯一的额外要求是在类路径上放置cglib-nodep-2.2或更高版本以及objenesis-1.2或更高版本。
+如果类路径中缺少这些库中的任何一个，Spock会通知你。
+
+* 注意
+```md
+CGLIB 从3.2.0开始支持Java 8
+```
+
 ### Stubbing
+
+Stubbing是让协作者以某种方式响应方法调用的行为。
+在对方法进行stubbing时，你不关心该方法的调用次数和是否被调用。
+你只是希望它在被调用时返回一些值，或者执行一些副作用。
+
+为了以下示例，让我们修改订阅者的receive方法，以返回一个状态代码，告知订阅者是否能够处理消息：
+```java
+interface Subscriber {
+    String receive(String message)
+}
+```
+现在，让我们在每次调用时使receive方法返回'ok'：
+```groovy
+subscriber.receive(_) >> "ok"
+```
+大声朗读：“每当订阅者收到消息时，请回复'确定'”。
+
+与模拟交互相比，stubbing 交互在左端没有基数，但在右端添加了响应生成器：
+```md
+subscriber.receive(_) >> "ok"
+|          |       |     |
+|          |       |     response generator
+|          |       argument constraint
+|          method constraint
+target constraint
+```
+stubbing 交互可以在then：块内，或者在when：block之前的任何位置声明。 
+（有关详细信息，请参阅[Where to Declare Interactions](#where-to-declare-interactions)。）
+如果模拟对象仅用于stubbing，则通常在模拟创建时或given：块中声明交互。
+
 #### Returning Fixed Values
+
+我们已经看到使用right-shift（）运算符来返回一个固定值。
+要为不同的调用返回不同的值，请使用多个交互：
+```groovy
+subscriber.receive("message1") >> "ok"
+subscriber.receive("message2") >> "fail"
+```
+每当收到“message1”时，这将返回“ok”，并且每当收到“message2”时返回“fail”。
+如果它们与方法声明的返回类型兼容，则可以返回哪些值没有限制。
+
 #### Returning Sequences of Values
+
+要在连续调用时返回不同的值，请使用triple-right-shift（）运算符：
+```groovy
+subscriber.receive(_) >>> ["ok", "error", "error", "ok"]
+```
+这将为第一次调用返回'ok'，对第二次和第三次调用返回'error'，对所有剩余的调用返回'ok'。
+右侧必须是Groovy知道如何迭代的值，在这个例子中，我们使用了一个普通的列表。
+
 #### Computing Return Values
+
+要根据方法的参数计算返回值，请使用right-shift（）运算符和闭包。
+如果闭包声明了一个无类型参数，它将传递方法的参数列表：
+```groovy
+subscriber.receive(_) >> { args -> args[0].size() > 3 ? "ok" : "fail" }
+```
+如果消息长度超过三个字符，则返回“ok”，否则返回“fail”。
+
+在大多数情况下，直接访问方法的参数会更方便。
+如果闭包声明了多个参数或单个类型参数，则方法参数将逐个映射到闭包参数：
+```groovy
+subscriber.receive(_) >> { String message -> message.size() > 3 ? "ok" : "fail" }
+```
+此响应生成器的行为与前一个相同，但可以说更具可读性。
+
+如果你发现自己需要有关方法调用的更多信息而不是其参数，请查看org.spockframework.mock.IMockInvocation。
+此接口中声明的所有方法都在闭包内部可用，无需为它们添加前缀。 
+（在Groovy术语中，闭包委托给IMockInvocation的一个实例。）
+
 #### Performing Side Effects
+
+有时你可能想做的不仅仅是计算返回值，典型的例子是抛出异常。闭包再次拯救我们：
+```groovy
+subscriber.receive(_) >> { throw new InternalError("ouch") }
+```
+当然，闭包可以包含更多代码，例如println语句。每次传入调用与交互匹配时都会执行它。
+
 #### Chaining Method Responses
 
+方法响应可以链接：
+```groovy
+subscriber.receive(_) >>> ["ok", "fail", "ok"] >> { throw new InternalError() } >> "ok"
+```
+这将为前三次调用返回'ok'，'fail'，'ok'，为第四次调用返回InternalError，并为任何进一步的调用返回ok。
+
 ### Combining Mocking and Stubbing
+
+Mocking and Stubbing 是相辅相成的
+```groovy
+1 * subscriber.receive("message1") >> "ok"
+1 * subscriber.receive("message2") >> "fail"
+```
+同一方法调用的 Mocking and stubbing 必须在同一个交互中进行。
+特别是，以下 Mockito 风格将 Mocking and Stubbing 拆分为两个单独的语句将不起作用：
+```groovy
+given:
+subscriber.receive("message1") >> "ok"
+
+when:
+publisher.send("message1")
+
+then:
+1 * subscriber.receive("message1")
+```
+
+正如在[Where to Declare Interactions](#where-to-declare-interactions)中所解释的那样，receive 调用将首先与then：块中的交互匹配。
+由于该交互未指定响应，因此将返回返回类型的默认值（在本例中为null）。 
+ (This is just another facet of Spock’s lenient approach to mocking.).因此，given：block中的交互永远不会有机会匹配。
+
+* 注意
+```md
+同一方法调用的 Mocking and stubbing 必须在同一个交互中进行。
+```
+
 ### Other Kinds of Mock Objects
+
+ 到目前为止，我们已经使用MockingApi.Mock方法创建了模拟对象。
+ 除了这个方法之外，MockingApi类还提供了一些其他工厂方法来创建更专业的模拟对象。
+
 #### Stubs
+
+使用MockingApi.Stub工厂方法创建Stubs。
+```groovy
+Subscriber subscriber = Stub()
+```
+模拟可以用于 stubbing and mocking ，而stub只能用于stubbing。
+将协作者限制为 stub 将其角色传达给规范的读者。
+
+* 注意
+```md
+如果stub调用与强制交互匹配（如1 * foo.bar（）），则抛出InvalidSpecException。
+```
+
+像模拟一样，Stub允许意外调用。但是，在这种情况下，存根返回的值更加雄心勃勃：
+1. 对于基本类型，返回基元类型的默认值。
+2. 对于非原始数值（例如BigDecimal），返回零。
+3. 对于非数值，返回“空”或“虚拟”对象。
+   这可能意味着一个空String，一个空集合，一个从其默认构造函数构造的对象，或另一个返回默认值的stub。
+   有关详细信息，请参阅org.spockframework.mock.EmptyOrDummyResponse类。
+
+* 注意
+```md
+如果方法的响应类型是最终类，或者如果它需要类模拟库并且cglib或ByteBuddy不可用，
+那么'dummy'对象创建将失败并出现CannotCreateMockException。
+```
+
+Stub 通常具有一组固定的交互，这使得[Declaring Interactions at Mock Creation Time](#declaring-interactions-at-mock-creation-time)特别有吸引力：
+```groovy
+Subscriber subscriber = Stub {
+    receive("message1") >> "ok"
+    receive("message2") >> "fail"
+}
+```
+
 #### Spies
+
+（在使用此功能之前请三思。更改规范下的代码设计可能更好。
+使用MockingApi.Spy工厂方法创建间谍：
+```groovy
+SubscriberImpl subscriber = Spy(constructorArgs: ["Fred"])
+```
+
 #### Partial Mocks
 
+（在使用此功能之前请三思。更改规范下的代码设计可能更好。）
+Spies can also be used as partial mocks:
+```groovy
+// this is now the object under specification, not a collaborator
+MessagePersister persister = Spy {
+  // stub a call on the same object
+  isPersistable(_) >> true
+}
+
+when:
+persister.receive("msg")
+
+then:
+// demand a call on the same object
+1 * persister.persist("msg")
+```
+
 ### Groovy Mocks
+
 #### Mocking Dynamic Methods
+
 #### Mocking All Instances of a Type
+
 #### Mocking Constructors
+
 #### Mocking Static Methods
 
 ### Advanced Features
+
 #### A la Carte Mocks
+
 #### Detecting Mock Objects
 
 ### Further Reading
 
 ## Extensions
+
+Spock带有强大的扩展机制，允许 Hook到Specification的生命周期，以丰富或改变其行为。
+在本章中，我们将首先了解Spock的内置扩展，然后深入编写自定义扩展。
+
 ### Spock Configuration File
 ### Built-In Extensions
+
+Spock的大多数内置扩展都是注解驱动的。换句话说，它们是通过使用特定注解标识spec类或方法触发的。
+可以通过其@ExtensionAnnotation元注解来说明这样的注解。
+
+#### Ignore
+#### IgnoreRest
+#### IgnoreIf
+#### Requires
+#### PendingFeature
+#### Stepwise
+#### Timeout
+#### Retry
+#### Use
+#### ConfineMetaClassChanges
+#### RestoreSystemProperties
+#### AutoAttach
+#### AutoCleanup
+#### Title and Narrative
+#### See
+#### Issue
+#### Subject
+#### Rule
+#### ClassRule
+#### Include and Exclude
+#### Optimize Run Order
+#### Report Log
+
 ### Third-Party Extensions
+
+参考 [Spock Wiki](https://github.com/spockframework/spock/wiki/Third-Party-Extensions)
+
 ### Writing Custom Extensions
 
+#### Global Extensions
+#### Annotation Driven Local Extensions
+#### Configuration Objects
+#### Interceptors
+
+![](_pic/spock_interceptors.png)
+
 ## Modules
-### Guice Module
-### Spring Module
-### Tapestry Module
-### Unitils Module
+### Guice Module 与Guice IoC容器集成
+
+### Spring Module 
+
+Spring模块支持与Spring TestContext Framework集成。
+它支持以下Spring注释 @ContextConfiguration和@ContextHierarchy。
+此外，它支持元注释@BootstrapWith，因此任何使用@BootstrapWith注释的注释也可以使用，例如@SpringBootTest，@WebMvcTest。
+
+### Tapestry Module 与Tapestry5 IoC容器集成
+
+### Unitils Module 与Unitils库集成
+
+[Unitils](https://github.com/linux-china/unitils)
+注：
+Unitils 是一个开源库，旨在使单元和集成测试变得容易和可维护。
+它分为几个模块，每个模块都为单元测试和集成测试的某个方面提供额外的支持。
+例如，如果您需要模拟测试，只需将unitils-mock包含为依赖项。
+如果您还想加载DbUnit数据集，只需包含unitils-dbunit。
+
 ### Grails Module
+[Grails](https://github.com/grails/grails)
+> A powerful web application framework based on the Groovy language 
+
+[spock-grails](https://github.com/spockframework/spock-grails)
+
+注意：
+ Grails 2.3及更高版本具有内置的Spock支持，不需要插件。
 
 ## Release Notes
 
