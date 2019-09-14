@@ -124,7 +124,7 @@ Spock的灵感来自JUnit，jMock，RSpec，Groovy，Scala，Vulcans 和其他�
 
 本章的目标是教会你编写一些真实的 Spock 描述脚本（specification），并激起你更大的兴趣。
 
-参考：
+参考： 
 [Groovy](http://groovy-lang.org/) 
 
 [单元测试](http://en.wikipedia.org/wiki/Unit_testing)
