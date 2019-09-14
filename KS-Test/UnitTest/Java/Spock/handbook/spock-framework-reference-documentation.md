@@ -1724,7 +1724,7 @@ Spock的大多数内置扩展都是注解驱动的。换句话说，它们是通
 ![](_pic/spock_interceptors.png)
 
 ## Modules
-### Guice Module 与Guice IoC容器集成
+### Guice Module [与Guice IoC容器集成]
 
 ### Spring Module 
 
@@ -1732,9 +1732,9 @@ Spring模块支持与Spring TestContext Framework集成。
 它支持以下Spring注释 @ContextConfiguration和@ContextHierarchy。
 此外，它支持元注释@BootstrapWith，因此任何使用@BootstrapWith注释的注释也可以使用，例如@SpringBootTest，@WebMvcTest。
 
-### Tapestry Module 与Tapestry5 IoC容器集成
+### Tapestry Module [与Tapestry5 IoC容器集成]
 
-### Unitils Module 与Unitils库集成
+### Unitils Module [与Unitils库集成]
 
 [Unitils](https://github.com/linux-china/unitils)
 注：
@@ -1743,7 +1743,7 @@ Unitils 是一个开源库，旨在使单元和集成测试变得容易和可维
 例如，如果您需要模拟测试，只需将unitils-mock包含为依赖项。
 如果您还想加载DbUnit数据集，只需包含unitils-dbunit。
 
-### Grails Module
+### Grails Module 
 [Grails](https://github.com/grails/grails)
 > A powerful web application framework based on the Groovy language 
 
