@@ -13,6 +13,8 @@
 
 * [Property-Based Test](PropertyBased/README.md)
 
+* [AI Test 智能测试](AITest/README.md)
+
 ## Performance
 * [Performance Test](perf/perf-test/README.md)
 * [Linux Performance Profile](perf/Linux/README.md)
