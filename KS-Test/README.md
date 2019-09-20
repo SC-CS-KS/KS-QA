@@ -1,6 +1,8 @@
 # Software Test
 
-## [测试基础](Basic/README.md)
+## [How Testing](Basic/README.md)
+* 测试策略
+* 测试用例
 
 ## Code 
 * [Code Review](CR/README.md)
