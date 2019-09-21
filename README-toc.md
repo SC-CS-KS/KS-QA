@@ -12,10 +12,12 @@
 ## [API Testing（接口测试）](KS-Test/APIsTest/README.md)
 ## [End-to-End Testing（端到端测试）](KS-Test/EndToEnd-Test/README.md)
 
-## [Property-Based Testing](KS-Test/PropertyBasedTest/README.md)
-## [AI Testing (智能测试)](KS-Test/AITest/README.md)
-
+## [Interaction-Based Testing（基于交互的测试）]()
 ## [Mock](KS-Test/Mock/README.md)
+
+## [Property-Based Testing](KS-Test/PropertyBasedTest/README.md)
+
+## [AI Testing (智能测试)](KS-Test/AITest/README.md)
 
 ## 代码
 ### [Code Review（代码评审）](Code/CR/README.md)
