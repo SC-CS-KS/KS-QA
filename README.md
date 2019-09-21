@@ -10,7 +10,7 @@ Table of Contents
       * [测试策略](#测试策略)
       * [<a href="KS-Test/Basic/TestCase.md">测试用例</a>](#测试用例)
       * [<a href="KS-Test/UnitTest/TestCase.md">Unit Testing（单元测试）</a>](#unit-testing单元测试)
-      * [<a href="KS-Test/APIsTest/README.md">AI Testing（接口测试）</a>](#ai-testing接口测试)
+      * [<a href="KS-Test/APIsTest/README.md">API Testing（接口测试）</a>](#ai-testing接口测试)
       * [<a href="KS-Test/EndToEnd-Test/README.md">End-to-End Testing（端到端测试）</a>](#end-to-end-testing端到端测试)
       * [<a href="KS-Test/PropertyBasedTest/README.md">Property-Based Testing</a>](#property-based-testing)
       * [<a href="KS-Test/AITest/README.md">AI Testing (智能测试)</a>](#ai-testing-智能测试)

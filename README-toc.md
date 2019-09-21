@@ -9,7 +9,7 @@
 ## [测试用例](KS-Test/Basic/TestCase.md)
 
 ## [Unit Testing（单元测试）](KS-Test/UnitTest/TestCase.md)
-## [AI Testing（接口测试）](KS-Test/APIsTest/README.md)
+## [API Testing（接口测试）](KS-Test/APIsTest/README.md)
 ## [End-to-End Testing（端到端测试）](KS-Test/EndToEnd-Test/README.md)
 
 ## [Property-Based Testing](KS-Test/PropertyBasedTest/README.md)
