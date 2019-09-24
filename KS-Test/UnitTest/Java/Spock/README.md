@@ -1,8 +1,9 @@
 # [Spock](http://spockframework.org)
 
-* [Spock Framework Reference Documentation](handbook/spock-framework-reference-documentation.md)
-
 ## [WhatIs](WhatIs.md)
+
+## Handbook
+* [Spock Framework Reference Documentation](https://github.com/SunnnyChan/spock-framework-reference-documentation)
 
 ## 构造块
 ```java
