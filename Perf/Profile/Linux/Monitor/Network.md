@@ -135,3 +135,8 @@ last_ack:
 closing: 
     设备已经接收到了对方的FIN，自己也回应了ACK，还需等待接收对方回应自己FIN的ACK；
 ```
+## 监控工具
+```bash
+$ cat /proc/interrupts
+$ sar -n ALL 2 1
+```

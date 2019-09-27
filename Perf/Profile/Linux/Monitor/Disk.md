@@ -118,6 +118,12 @@ read_sectors/10: 每秒读扇区数;
 write_merges/10: 每秒写合并数;
 read_merges/10: 每秒读合并数;
 ```
+## 监控工具
+### iotop
+```md
+能看到扁平线程IO活动
+```
+### iostat
 
 ## I/O 优化
 ### 系统参数
