@@ -1,6 +1,5 @@
-# QA 知识体系
 
-Table of Contents
+KS-QA
 =================
 
    * [<a href="_pic/QA-capacity-model.png">QA 能力模型</a>](#qa-能力模型)
@@ -26,7 +25,10 @@ Table of Contents
          * [<a href="Code/CodeInspect/README.md">Code Inspect（代码检查）</a>](#code-inspect代码检查)
       * [分析](#分析)
          * [<a href="code-coverage/README.md">Code Coverage (代码覆盖率)</a>](#code-coverage-代码覆盖率)
-   * [<a href="Performance/README.md">性能</a>](#性能)
-      * [<a href="Performance/PerformanceTest/README.md">Performance Test</a>](#performance-test)
-      * [<a href="Performance/Linux/README.md">Linux Performance Profile</a>](#linux-performance-profile)
+   * [性能](#性能)
+      * [<a href="Perf/PerfTest/README.md">Performance Test</a>](#performance-test)
+      * [<a href="Perf/Profile/README.md">Performance Profile</a>](#performance-profile)
+         * [Linux](#linux)
+   * [Reference](#reference)
+   * [Resource](#resource)
 
