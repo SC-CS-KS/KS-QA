@@ -1,27 +1,25 @@
-## 应用程序
-
+# 应用程序
 
 ## 进程
-
-### 统计指标
 * /proc/${fd}/stat
 
-#### 指标
-* CPU User Time
+### CPU User Time
 ```md
 数据源: /proc/${fd}/stat; 采集方式: 累计值，每10秒采集一次取差值； 指标：process.stat (key: system); 备注：所有相同名称的进程会累加在一起计算；
 cpu.utime_all_cores/10: cpu.utime_all_cores(所有cpu核的用户态时间/总核数)/10
 ```
-* CPU System Time
+### CPU System Time
 ```md
 cpu.stime_all_cores/10: cpu.stime_all_cores(所有cpu核的内核态时间/总核数)/10
 ```
-* 内存使用
+### 内存使用
 ```md
 数据源: /proc/${fd}/stat; 采集方式: 直接使用当前值； 指标：process.stat (key: system); 备注：所有相同名称的进程会累加在一起计算；
 mem.rss*1024: mem.rss为物理地址空间的大小，单位为KB，乘以1024后为bytes
 ```
-* 线程数
+
+## 线程
+### 线程数
 ```md
 nums.thread: 总线程数
 ```

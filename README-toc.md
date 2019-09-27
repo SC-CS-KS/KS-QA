@@ -33,9 +33,10 @@
 ## 分析
 ### [Code Coverage (代码覆盖率)](code-coverage/README.md)
 
-# [性能](Performance/README.md)
-## [Performance Test](Performance/PerformanceTest/README.md)
-## [Linux Performance Profile](Performance/Linux/README.md)
+# 性能
+## [Performance Test](Perf/PerfTest/README.md)
+## [Performance Profile](Perf/Profile/README.md)
+### Linux
 
 # Reference
 * [软件测试中英文词汇汇总表](https://www.cnblogs.com/kenfang/articles/4307935.html)

@@ -1,8 +1,8 @@
 # CPU
 
 
-## 统计指标
-* CPU使用率
+## 性能计数
+* CPU使用率 - 显示的是程序在运行期间实时占用的CPU百分比
 ```md
 该值为cpu tick累计值，每10秒采集一次，获取差值后将 cputick总时间(0.01s)换算为自然时间，与10s求比例，
 得到0-100的百分比； measurement: cpu.usage (key: system);
@@ -16,10 +16,12 @@ steal: 虚拟化环境下，被同一宿主机上其他虚拟机系统占用的�
 irq: cpu处理硬件中断的时间占比；
 softirq: cpu处理软中断的时间占比；
 ```
-* CPU Load Average
+* CPU Load Average - 显示的是一段时间内正在使用和等待使用CPU的平均任务数
 ```md
 last1min：过去1分钟正在运行或等待运行的进程数；
 last5min：过去5分钟正在运行或等待运行的进程数；
 last15min：过去15分钟正在运行或等待运行的进程数；
 num_cpu： cpu核数，将以上数值除以核数，可以衡量单个cpu核心的负载；
 ```
+
+
