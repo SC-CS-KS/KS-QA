@@ -1,5 +1,7 @@
+# KS-QA
+[![License](https://img.shields.io/badge/license-Apache%202-4EB1BA.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
 
-KS-QA
+Content
 =================
 
    * [<a href="_pic/QA-capacity-model.png">QA 能力模型</a>](#qa-能力模型)
