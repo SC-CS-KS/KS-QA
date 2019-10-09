@@ -40,10 +40,9 @@
 ## [测试分析](Testing/Analysis/README.md)
 ### [代码覆盖率分析（Code Coverage](code-coverage/README.md)
 
-# [代码评审（Code Review)](CodeReview/CR/README.md)
+# [代码评审（Code Review)](CodeReview/README.md)
 # [代码分析（Code Analysis）](CodeAnalysis/README.md)
-## [代码检查（Code Inspect）](CodeAnalysis/CodeInspect/README.md)
-## [静态代码检查(Code Static Analysis)](CodeAnalysis/StaticAnalysis/README.md)
+## [静态代码检查(Code Static Inspect)](CodeAnalysis/StaticAnalysis/README.md)
 ## [Java 代码分析](CodeAnalysis/Java/README.md)
 
 # 性能

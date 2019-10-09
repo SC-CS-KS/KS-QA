@@ -1,4 +1,0 @@
-# Code Inspect
-
-
-## Java
