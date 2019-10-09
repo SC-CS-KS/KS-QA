@@ -53,6 +53,9 @@
 ## [Performance Profile](Perf/Profile/README.md)
 ### [Linux](Perf/Profile/Linux/README.md)
 
+# 稳定性
+## 故障演练
+
 # [质量意识](QualityConsciousness/README.md)
 ## 测试服务化 -  “把简单留给开发者，把复杂留给工具。” 
 ## 测试认证
