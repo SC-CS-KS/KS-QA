@@ -39,6 +39,7 @@
 
 # [代码分析（Code Analysis）](CodeAnalysis/README.md)
 ## [静态代码检查(Code Static Inspect)](CodeAnalysis/StaticAnalysis/README.md)
+## [代码差异分析](CodeAnalysis/CodeDiff/README.md)
 ## [Java 代码分析](CodeAnalysis/Java/README.md)
 
 # [质量分析](QualityAnalysis/README.md)
