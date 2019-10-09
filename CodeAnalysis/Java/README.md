@@ -8,11 +8,12 @@
          * [类型推断](#类型推断)
          * [模型检查](#模型检查)
          * [数据流分析](#数据流分析)
-      * [Tools](#tools)
-         * [CheckStyle](#checkstyle)
-         * [<a href="http://findbugs.sourceforge.net/manual/index.html" rel="nofollow">FindBugs</a>](#findbugs)
-         * [PMD](#pmd)
-         * [Jtest](#jtest)
+      * [CheckStyle](#checkstyle)
+      * [<a href="http://findbugs.sourceforge.net/manual/index.html" rel="nofollow">FindBugs</a>](#findbugs)
+      * [<a href="https://pmd.github.io" rel="nofollow">PMD</a>](#pmd)
+      * [Jtest](#jtest)
+      * [NPE](#npe)
+         * [<a href="https://github.com/uber/NullAway">NullAway - NPE 检测工具</a>](#nullaway---npe-检测工具)
 
 ## Java 静态代码分析理论基础和主要技术
 ### 缺陷模式匹配
@@ -49,8 +50,7 @@
 	可以确定变量的定义以及在代码中被引用的情况，同时还能够检查代码数据流异常，如引用在前赋值在后、只赋值无引用等。
 数据流分析主要适合检验程序中的 数据域特性。
 ```
-## Tools
-### CheckStyle
+## CheckStyle
 ```md
 结果分析
 	25 First sentence should end with a period.
@@ -68,7 +68,7 @@ Import 语句：检查 Import 语句是否符合定义规范
 代码问题：检查重复代码，条件判断，魔数等问题
 类设计：检查类的定义是否符合规范，如构造函数的定义等问题
 ```
-### [FindBugs](http://findbugs.sourceforge.net/manual/index.html)
+## [FindBugs](http://findbugs.sourceforge.net/manual/index.html)
 ```md
 WhatIs
 	Find Bugs in Java Programs
@@ -95,7 +95,7 @@ Correctness 可能导致错误的代码，如空指针引用等
 多线程的正确性：如多线程编程时常见的同步，线程调度问题。
 运行时性能问题：如由变量定义，方法调用导致的代码低效问题。
 ```
-### [PMD](https://pmd.github.io)
+## [PMD](https://pmd.github.io)
 ```md
 可能的 Bugs：检查潜在代码错误，如空 try/catch/finally/switch 语句
 未使用代码（Dead code）：检查未使用的变量，参数，方法
@@ -112,7 +112,7 @@ Intellij
 An extensible cross-language static code analyzer.
 sh /Users/didi/WorkPlace/tools/pmd/pmd-bin-6.9.0/bin/run.sh pmd -d ../../dev/dididata/dp_jobcenter/jobcenter-server/src -R rules.xml -f text
 ```
-### Jtest
+## Jtest
 ```md
 可能的错误：如内存破坏、内存泄露、指针错误、库错误、逻辑错误和算法错误等
 未使用代码：检查未使用的变量，参数，方法
@@ -123,3 +123,5 @@ Javadoc 注释：检查类及方法的 Javadoc 注释
 国际化问题：
 垃圾回收：检查变量及 JDBC 资源是否存在内存泄露隐患
 ```
+## NPE
+### [NullAway - NPE 检测工具](https://github.com/uber/NullAway)
