@@ -44,10 +44,11 @@
 
 # [质量分析](QualityAnalysis/README.md)
 ## 可测性分析
-## [测试代码覆盖率分析（Code Coverage - 已有代码被测试了吗？](code-coverage/README.md)
+## [测试代码覆盖率分析（Code Coverage - 已有代码被测试了吗？](QualityAnalysis/CodeCoverage/README.md)
+### [Java - Jacoco](QualityAnalysis/CodeCoverage/Jacoco.md)
+
 ## 测试有效性分析 - 已有代码测好了吗？
 ## 业务覆盖率分析 - 还有哪些代码要写？
-## Java - Jacoco
 
 # 性能
 ## [Performance Test](Perf/PerfTest/README.md)
