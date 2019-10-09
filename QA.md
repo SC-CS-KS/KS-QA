@@ -1,8 +1,9 @@
 
 # [QA 能力模型](_pic/QA-capacity-model.png)
 
-# [软件质量保证](SQA/README.md)
-## [质量](SQA/Quality/README.md)
+# [软件质量](SQA/SQ.md)
+## 软件质量模型
+# [软件质量保证](SQA/SQA.md)
 
 # 测试
 ## [测试基础](Testing/Basic/README.md)
