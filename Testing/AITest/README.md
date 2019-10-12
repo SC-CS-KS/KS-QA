@@ -2,6 +2,18 @@
 
 ## [WhatIs](WhatIs.md)
 
+## Test Generation
+[Test Generation in Java](http://www.amygdalum.net/en/testgenerators-a-detailed-overview.html)
+### Tools without Program Analysis
+### Tools with Static Program Analysis
+### Tools with Dynamic Program Analysis
+
+## [基于搜索的测试 (The Search-Based Software Testing, SBST)](https://sbst19.github.io/)
+```md
+是优化搜索技术（例如遗传算法）的应用程序，用于解决软件测试中的问题。
+SBST用于生成测试数据，确定测试用例的优先级，最小化测试套件，优化软件测试，减少人工成本，验证软件模型，
+测试面向服务的体系结构，构建用于交互测试的测试套件以及验证实时属性（其中其他）。
+```
 
 ## 工具
 ```md

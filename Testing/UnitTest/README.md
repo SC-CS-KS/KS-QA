@@ -1,36 +1,23 @@
-# Unit Test
-根据 [2019 Stack Overflow 年度开发者调查报告](https://insights.stackoverflow.com/survey/2019#work-_-code-review)，
-国外 41.8% 的公司把 UT 作为工作流程，20.5% 开发者自行完成，33.2% 没有做单元测试，但觉得应该做，只有4.4%认为没有必要做单元测试。
 
-## Java 
-### 数据准备
-* [easy-random - Easy Random是一个生成随机Java Bean的库](https://github.com/j-easy/easy-random)
-* DbUnit - JUnit的一个扩展
+Unit Test
+=================
 
-### Runner
-* [JUnit](Java/JUnit/README.md)
-* [TestNG](Java/TestNG/README.md)
-* [Spock](Java/Spock/README.md)
-* Spring-Test
-```md
-Spring和JUnit的整合，提供了对应的Runner和Rule，使用的比较多的是Spring的Runner。
-```
+   * [Unit Test](#unit-test)
+      * [Java](#java)
+         * [数据准备](#数据准备)
+            * [<a href="https://github.com/j-easy/easy-random">easy-random - Easy Random是一个生成随机Java Bean的库</a>](#easy-random---easy-random是一个生成随机java-bean的库)
+         * [Runner](#runner)
+            * [<a href="Java/JUnit/README.md">JUnit</a>](#junit)
+            * [<a href="Java/TestNG/README.md">TestNG</a>](#testng)
+            * [<a href="Java/Spock/README.md">Spock</a>](#spock)
+         * [Mock](#mock)
+            * [<a href="Mockito/README.md">Mockito</a>](#mockito)
+            * [JMockit](#jmockit)
+      * [<a href="AI/README.md">AI in UT</a>](#ai-in-ut)
+         * [基于搜索的(最⼤大化覆盖率或异常)](#基于搜索的最大化覆盖率或异常)
+            * [EvoSuite - Automatic Test Suite Generation for Java](#evosuite)
+         * [基于随机测试](#基于随机测试)
+            * [Randoop](#randoop)
+         * [静态分析、符号表执⾏](#静态分析符号表执)
+      * [Reference](#reference)
 
-### Mock
-```md
-场景
-外部依赖的应用的调用，比如WebService等服务依赖
-DAO层（访问MySQL、Oracle、Emcache等底层存储）的调用等
-系统间异步交互通知消息
-methodA里面调用到的methodB
-一些应用里面自己的Class(abstract，final，static）、Interface、Annotation、Enum和Native等。
-```
-* [Mockito](Mockito/README.md)
-* JMockit
-
-### Auto
-* randoop
-* Evosuite
-
-## Reference
-* [JUnit4 和 TestNG](https://www.yiibai.com/testng/junit-vs-testng-comparison.html)

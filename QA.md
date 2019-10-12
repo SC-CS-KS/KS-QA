@@ -31,7 +31,8 @@
 ## [基于交互的测试(Interaction-Based Testing)]()
 ### [Mock](Testing/InteractionBasedTest/Mock/README.md)
 ## [基于属性的测试(Property-Based Testing)](Testing/PropertyBasedTest/README.md)
-## 模糊测试
+## [模糊测试(Fuzzing Testing)]()
+## [变异测试(Mutation Testing)](MutationTest/README.md)
 ## [智能测试(AI Testing)](Testing/AITest/README.md)
 ## 精准测试
 
@@ -63,6 +64,9 @@
 ## 测试认证
 
 # [质量平台](QualityPlatform/README.md)
+
+# 探索
+## [Concolic Testing](https://en.wikipedia.org/wiki/Concolic_testing)
 
 # Reference
 ## [软件测试中英文词汇汇总表](https://www.cnblogs.com/kenfang/articles/4307935.html)
