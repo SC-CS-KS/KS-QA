@@ -2,7 +2,7 @@
 
 
 ## Reference
-### [Linux Performance](http://www.brendangregg.com/linuxperf.html)
+### [Linux Performance - Brendan D. Gregg](http://www.brendangregg.com/linuxperf.html)
 ![Linux Performance Tools](_pic/linux_perf_tools_full.png)
 
 ![Linux Observability Tools](_pic/linux_observability_tools.png)
