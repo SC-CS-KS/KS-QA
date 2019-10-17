@@ -54,11 +54,9 @@
 # [性能](Perf/README.md)
 ## [Performance Test](Perf/PerfTest/README.md)
 ## [Performance Analysis](Perf/PerfAnalysis/README.md)
-## [Linux Performance](Perf/LinuxPerf/README.md)
-
 ## Systems Performance
 ### [《性能之巅：洞悉系统、企业和云计算》(Systems Performance: Enterprise and the Cloud)](https://github.com/SunnnyChan/sc.ebooks/tree/master/programme/profile/sys-performance)
-## [Linux](Perf/Profile/Linux/README.md)
+## [Linux Performance](Perf/LinuxPerf/README.md)
 ### [《BPF Performance Tools》](https://github.com/SunnnyChan/sc.ebooks/tree/master/programme/profile/BPF-Perf)
 
 # 稳定性
