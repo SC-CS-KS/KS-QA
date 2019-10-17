@@ -13,6 +13,6 @@
 
 ![Linux Benchmarking Tools](_pic/linux_benchmarking_tools.png)
 
-![Linux Performance Observability: Sar](_pic/linux_observability_sar.png.png)
+![Linux Performance Observability: Sar](_pic/linux_observability_sar.png)
 
 ![Linux bcc/BPF Tracing Tools](_pic/bcc_tracing_tools.png)
