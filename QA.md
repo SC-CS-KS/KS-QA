@@ -51,9 +51,10 @@
 ## 测试有效性分析 - 已有代码测好了吗？
 ## 业务覆盖率分析 - 还有哪些代码要写？
 
-# 性能
+# [性能](Perf/README.md)
 ## [Performance Test](Perf/PerfTest/README.md)
 ## [Performance Analysis](Perf/PerfAnalysis/README.md)
+## [Linux Performance](Perf/LinuxPerf/README.md)
 
 ## Systems Performance
 ### [《性能之巅：洞悉系统、企业和云计算》(Systems Performance: Enterprise and the Cloud)](https://github.com/SunnnyChan/sc.ebooks/tree/master/programme/profile/sys-performance)
