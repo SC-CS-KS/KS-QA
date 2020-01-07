@@ -18,7 +18,7 @@
 [Javalanche - Github](https://github.com/david-schuler/javalanche)
 ```md
 用于Java程序变异测试的Javalanche框架解决了效率问题和等效变异问题。
-avalanche是专为从根本上提高效率而构建的，可以直接处理字节代码，并可以对比早期研究对象大几个数量级的程序进行突变测试。
+Javalanche是专为从根本上提高效率而构建的，可以直接处理字节代码，并可以对比早期研究对象大几个数量级的程序进行突变测试。
 ```
 
 ## MuTest
