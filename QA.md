@@ -19,7 +19,7 @@
 
 ## [接口测试(APIs Testing)](Testing/APIsTest/README.md)
 
-## [端到端测试(End-to-End Testing)](Testing/EndToEnd-Test/README.md)
+## [端到端测试(End-to-End Testing)](Testing/EndToEndT/README.md)
 
 ## [数据测试](Testing/DataTest/README.md)
 ## 配置测试
@@ -29,8 +29,9 @@
 ## [探索式测试（Exploratory Test）](ET/README.md)
 
 ## [基于交互的测试(Interaction-Based Testing)]()
-### [Mock](Testing/InteractionBasedTest/Mock/README.md)
-## [基于属性的测试(Property-Based Testing)](Testing/PropertyBasedTest/README.md)
+### [Mock](Testing/InteractionBasedT/Mock/README.md)
+## [基于属性的测试（Property-Based Testing）](Testing/PropertyBasedT/README.md)
+## [基于模型的测试（Model Based Testing)](Testing/ModelBasedT/README.md)
 ## [模糊测试(Fuzzing Testing)]()
 ## [变异测试(Mutation Testing)](MutationTest/README.md)
 ## [智能测试(AI Testing)](Testing/AITest/README.md)
@@ -60,6 +61,8 @@
 ### [《性能之巅：洞悉系统、企业和云计算》(Systems Performance: Enterprise and the Cloud)](https://github.com/SunnnyChan/sc.ebooks/tree/master/programme/profile/sys-performance)
 
 # 稳定性
+
+## [软件故障注入](Stability/SFI/README.md)
 ## 故障演练
 
 # [质量意识](QualityConsciousness/README.md)
