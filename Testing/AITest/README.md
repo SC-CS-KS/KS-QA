@@ -11,7 +11,7 @@
 ## [基于搜索的测试 (The Search-Based Software Testing, SBST)](https://sbst19.github.io/)
 ```md
 是优化搜索技术（例如遗传算法）的应用程序，用于解决软件测试中的问题。
-SBST用于生成测试数据，确定测试用例的优先级，最小化测试套件，优化软件测试，减少人工成本，验证软件模型，
+SBST 用于生成测试数据，确定测试用例的优先级，最小化测试套件，优化软件测试，减少人工成本，验证软件模型，
 测试面向服务的体系结构，构建用于交互测试的测试套件以及验证实时属性（其中其他）。
 ```
 
@@ -29,7 +29,7 @@ Eggplant
 
 Test.AI
 	业界比较知名的两本书籍（《How Google Tests Software》《App Quality: Secrets for Agile App Teams》）
-	写团队所创建的一个AI自动化测试平台，其核心能力是将AI大脑添加到Selenium和Appium的工具来提升其智能化能力。
+	团队所创建的一个AI自动化测试平台，其核心能力是将AI大脑添加到Selenium和Appium的工具来提升其智能化能力。
 
 MABL 主攻领域就是提供End-To-End的端到端测试解决方案，AI也是其中很重要的方向
 
