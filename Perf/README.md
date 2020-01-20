@@ -60,7 +60,7 @@
 
    * [DB](Profile.md#db)
    * [Java](Profile.md#java)
-   * [C/C  ](Profile.md#cc)
+   * [C/C++](Profile.md#cc)
       * [<a href="https://github.com/gperftools/gperftools">gperftools - Google Performance Tools</a>](Profile.md#gperftools---google-performance-tools)
       * [Valgrind](Profile.md#valgrind)
    * [Resource](Profile.md#resource)
