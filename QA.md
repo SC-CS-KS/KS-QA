@@ -34,6 +34,7 @@
 ## [基于模型的测试（Model Based Testing)](Testing/ModelBasedT/README.md)
 ## [模糊测试(Fuzzing Testing)]()
 ## [变异测试(Mutation Testing)](MutationTest/README.md)
+## [故障注入测试（FIT）](Stability/SFI/README.md)
 ## [智能测试(AI Testing)](Testing/AITest/README.md)
 ## 精准测试
 
