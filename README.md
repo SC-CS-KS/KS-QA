@@ -57,6 +57,8 @@ QA
       * [测试服务化 -  “把简单留给开发者，把复杂留给工具。”](#测试服务化----把简单留给开发者把复杂留给工具)
       * [测试认证](#测试认证)
    * [<a href="QualityPlatform/README.md">质量平台</a>](#质量平台)
+   * [软件研发模式中的测试](#软件研发模式中的测试)
+      * [<a href="https://github.com/SC-CS-KS/KS-SE/blob/master/KS-SDM/TDD/">测试驱动开发 TDD</a>](#测试驱动开发-tdd)
    * [探索](#探索)
       * [<a href="https://en.wikipedia.org/wiki/Concolic_testing" rel="nofollow">Concolic Testing</a>](#concolic-testing)
    * [Reference](#reference)

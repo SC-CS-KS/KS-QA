@@ -68,6 +68,9 @@
 
 # [质量平台](QualityPlatform/README.md)
 
+# 软件研发模式中的测试
+## [测试驱动开发 TDD](https://github.com/SC-CS-KS/KS-SE/blob/master/KS-SDM/TDD/)
+
 # 探索
 ## [Concolic Testing](https://en.wikipedia.org/wiki/Concolic_testing)
 
