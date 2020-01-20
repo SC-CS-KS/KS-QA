@@ -4,3 +4,11 @@
 模型是对系统行为的描述，可以根据输入序列、动作、条件、输出和从输入到输出的数据流来描述行为。
 它应该是实际可理解的，并可重复使用;shareable必须有被测系统的精确描述。
 
+## 模型
+
+Data Flow
+Control Flow
+Dependency Graphs
+Decision Tables
+State transition machines
+
